@@ -33,7 +33,7 @@ def draw(expData):
     ax.set_ylabel('Latency (ms)')
     ax.set_xlabel('# Nodes')
     #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('# Partitions = 3')
+    ax.set_title('Responsiveness')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
     ax.set_xticks(ind)
     ax.set_xticklabels(('16', '32', '64'))
@@ -49,61 +49,60 @@ def draw(expData):
         
         #autolabel(rects, ax)
     print(yMax)
-    plt.ylim(top=yMax + 70000)
+    plt.ylim(top=yMax + 10000)
     ax.legend(loc='upper left')
     fig.tight_layout()
-    plt.axhline(60000, color='k', linestyle='dashed', linewidth=1)
-    #plt.text(2, 2, 'resolve', ha='right', va='center')
     plt.show()
 
-data = partition2.data
-attackData = adaptive.data
-t = 'm'
+n1Data = normal1.data
+n2Data = normal2.data
+lData = l2.data
+t = 'l'
 mean = t + '_mean'
 std = t + '_std'
 expData = [
     {
-        'means': data['v-basic'][mean],
-        'std': data['v-basic'][std],
-        'label': 'ADD+v1',
+        'means': n2Data['v-basic'][mean],
+        'std': n2Data['v-basic'][std],
+        'label': 'ADD+v1 (' + r'$Network = \mathcal{N}(250, 50), \lambda = 1000$' + ')',
         'color': '#e74c3c'
     },
     {
-        'means': data['v-vrf'][mean],
-        'std': data['v-vrf'][std],
-        'label': 'ADD+v2',
+        'means': n1Data['v-basic'][mean],
+        'std': n1Data['v-basic'][std],
+        'label': 'ADD+v1 (' + r'$Network = \mathcal{N}(1000, 300), \lambda = 1000$' + ')',
         'color': '#e67e22'
     },
     {
-        'means': data['v-adaptive'][mean],
-        'std': data['v-adaptive'][std],
-        'label': 'ADD+v3',
+        'means': lData['v-basic'][mean],
+        'std': lData['v-basic'][std],
+        'label': 'ADD+v1 (' + r'$Network = \mathcal{N}(250, 50), \lambda = 2000$' + ')',
         'color': '#f1c40f'
     },
     {
-        'means': data['algorand'][mean],
-        'std': data['algorand'][std],
-        'label': 'Algorand',
+        'means': n2Data['pbft'][mean],
+        'std': n2Data['pbft'][std],
+        'label': 'PBFT (' + r'$Network = \mathcal{N}(250, 50), \lambda = 1000$' + ')',
         'color': '#2ecc71'
     },
     {
-        'means': data['aba'][mean],
-        'std': data['aba'][std],
-        'label': 'Async BA',
+        'means': n1Data['pbft'][mean],
+        'std': n1Data['pbft'][std],
+        'label': 'PBFT (' + r'$Network = \mathcal{N}(1000, 300), \lambda = 1000$' + ')',
         'color': '#3498db'
     },
     {
-        'means': data['dexon-hba'][mean],
-        'std': data['dexon-hba'][std],
-        'label': 'DEXON HBA',
+        'means': lData['pbft'][mean],
+        'std': lData['pbft'][std],
+        'label': 'PBFT (' + r'$Network = \mathcal{N}(250, 50), \lambda = 2000$' + ')',
         'color': '#34495e'
     },
-    {
-        'means': data['pbft'][mean],
-        'std': data['pbft'][std],
-        'label': 'PBFT',
-        'color': '#8e44ad'
-    }
+    # {
+    #     'means': data['pbft'][mean],
+    #     'std': data['pbft'][std],
+    #     'label': 'PBFT',
+    #     'color': '#8e44ad'
+    # }
 ]
 # calculate pos
 l = len(expData)

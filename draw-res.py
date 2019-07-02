@@ -5,6 +5,16 @@ import normal1, normal2
 import l04, l2
 import partition, partition2
 import static, adaptive, dexon
+
+colors = {
+    'r': '#e74c3c',
+    'o': '#e67e22',
+    'y': '#f1c40f',
+    'g': '#2ecc71',
+    'b': '#3498db',
+    'd': '#34495e',
+    'p': '#8e44ad'
+}
 '''
 def autolabel(rects, ax, xpos='center'):
     """
@@ -25,18 +35,20 @@ def autolabel(rects, ax, xpos='center'):
                     textcoords="offset points",  # in both directions
                     ha=ha[xpos], va='bottom')
 '''
-width = 0.06  # the width of the bars
-seperateDist = 0.04
+width = 0.2  # the width of the bars
+seperateDist = 0.15
 def draw(expData):
     fig, ax = plt.subplots()
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('Latency (ms)')
     ax.set_xlabel('# Nodes')
     #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('Responsiveness')
+    ax.set_title('Different Network Configuration ' + r'$\lambda$')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
+
     ax.set_xticks(ind)
-    ax.set_xticklabels(('16', '32', '64'))
+    ax.tick_params(axis='x', which='major', labelsize=9)
+    ax.set_xticklabels(('ADD+v1', 'ADD+v2', 'ADD+v3', 'Algorand', 'Async BA', 'DEXON HBA', 'PBFT'))
     yMax = 0
     for data in expData:
         print(data)
@@ -49,54 +61,166 @@ def draw(expData):
         
         #autolabel(rects, ax)
     print(yMax)
-    plt.ylim(top=yMax + 10000)
+    plt.axvline(3.5, color='k', linestyle='dashed', linewidth=1)
+
+    plt.ylim(top=yMax + 1000)
     ax.legend(loc='upper left')
     fig.tight_layout()
     plt.show()
 
 n1Data = normal1.data
 n2Data = normal2.data
-lData = l2.data
+l2Data = l2.data
+l04Data = l04.data
 t = 'l'
 mean = t + '_mean'
 std = t + '_std'
+# for different network
+d1 = {
+    'mean': [
+        n2Data['v-basic'][mean][0], 
+        n2Data['v-vrf'][mean][0], 
+        n2Data['v-adaptive'][mean][0], 
+        n2Data['algorand'][mean][0],
+        n2Data['aba'][mean][0],
+        n2Data['dexon-hba'][mean][0],
+        n2Data['pbft'][mean][0]
+    ],
+    'std': [
+        n2Data['v-basic'][std][0], 
+        n2Data['v-vrf'][std][0], 
+        n2Data['v-adaptive'][std][0], 
+        n2Data['algorand'][std][0],
+        n2Data['aba'][std][0],
+        n2Data['dexon-hba'][std][0],
+        n2Data['pbft'][std][0]]
+}
+d2 = {
+    'mean': [
+        n1Data['v-basic'][mean][0], 
+        n1Data['v-vrf'][mean][0], 
+        n1Data['v-adaptive'][mean][0], 
+        n1Data['algorand'][mean][0],
+        n1Data['aba'][mean][0],
+        n1Data['dexon-hba'][mean][0],
+        n1Data['pbft'][mean][0]
+    ],
+    'std': [
+        n1Data['v-basic'][std][0], 
+        n1Data['v-vrf'][std][0], 
+        n1Data['v-adaptive'][std][0], 
+        n1Data['algorand'][std][0],
+        n1Data['aba'][std][0],
+        n1Data['dexon-hba'][std][0],
+        n1Data['pbft'][std][0]]
+}
+# for different lambda
+d3 = {
+    'mean': [
+        l04Data['v-basic'][mean][0], 
+        l04Data['v-vrf'][mean][0], 
+        l04Data['v-adaptive'][mean][0], 
+        l04Data['algorand'][mean][0],
+        l04Data['aba'][mean][0],
+        l04Data['dexon-hba'][mean][0],
+        l04Data['pbft'][mean][0],
+    ],
+    'std': [
+        l04Data['v-basic'][std][0], 
+        l04Data['v-vrf'][std][0], 
+        l04Data['v-adaptive'][std][0], 
+        l04Data['algorand'][std][0],
+        l04Data['aba'][std][0],
+        l04Data['dexon-hba'][std][0],
+        l04Data['pbft'][std][0],
+    ]
+}
+d4 = {
+    'mean': [
+        n1Data['v-basic'][mean][0], 
+        n1Data['v-vrf'][mean][0], 
+        n1Data['v-adaptive'][mean][0], 
+        n1Data['algorand'][mean][0],
+        n1Data['aba'][mean][0],
+        n1Data['dexon-hba'][mean][0],
+        n1Data['pbft'][mean][0],
+    ],
+    'std': [
+        n1Data['v-basic'][std][0], 
+        n1Data['v-vrf'][std][0], 
+        n1Data['v-adaptive'][std][0], 
+        n1Data['algorand'][std][0],
+        n1Data['aba'][std][0],
+        n1Data['dexon-hba'][std][0],
+        n1Data['pbft'][std][0],
+    ]
+
+}
+d5 = {
+    'mean': [
+        l2Data['v-basic'][mean][0], 
+        l2Data['v-vrf'][mean][0], 
+        l2Data['v-adaptive'][mean][0], 
+        l2Data['algorand'][mean][0],
+        l2Data['aba'][mean][0],
+        l2Data['dexon-hba'][mean][0],
+        l2Data['pbft'][mean][0],
+    ],
+    'std': [
+        l2Data['v-basic'][std][0], 
+        l2Data['v-vrf'][std][0], 
+        l2Data['v-adaptive'][std][0], 
+        l2Data['algorand'][std][0],
+        l2Data['aba'][std][0],
+        l2Data['dexon-hba'][std][0],
+        l2Data['pbft'][std][0],
+    ]
+
+}
+
 expData = [
+    # {
+    #     'means': d1['mean'],
+    #     'std': d1['std'],
+    #     'label': r'$\mathcal{N}(1000, 300)$',
+    #     'color': colors['r']
+    # },
+    # {
+    #     'means': d2['mean'],
+    #     'std': d2['std'],
+    #     'label': r'$\mathcal{N}(250, 50)$',
+    #     'color': colors['g']
+    # },
     {
-        'means': n2Data['v-basic'][mean],
-        'std': n2Data['v-basic'][std],
-        'label': 'ADD+v1 (' + r'$Network = \mathcal{N}(250, 50), \lambda = 1000$' + ')',
-        'color': '#e74c3c'
+        'means': d3['mean'],
+        'std': d3['std'],
+        'label': r'$\lambda = 400$',
+        'color': colors['g']
     },
     {
-        'means': n1Data['v-basic'][mean],
-        'std': n1Data['v-basic'][std],
-        'label': 'ADD+v1 (' + r'$Network = \mathcal{N}(1000, 300), \lambda = 1000$' + ')',
-        'color': '#e67e22'
+        'means': d4['mean'],
+        'std': d4['std'],
+        'label': r'$\lambda = 1000$',
+        'color': colors['y']
     },
-    {
-        'means': lData['v-basic'][mean],
-        'std': lData['v-basic'][std],
-        'label': 'ADD+v1 (' + r'$Network = \mathcal{N}(250, 50), \lambda = 2000$' + ')',
-        'color': '#f1c40f'
+        {
+        'means': d5['mean'],
+        'std': d5['std'],
+        'label': r'$\lambda = 2000$',
+        'color': colors['r']
     },
-    {
-        'means': n2Data['pbft'][mean],
-        'std': n2Data['pbft'][std],
-        'label': 'PBFT (' + r'$Network = \mathcal{N}(250, 50), \lambda = 1000$' + ')',
-        'color': '#2ecc71'
-    },
-    {
-        'means': n1Data['pbft'][mean],
-        'std': n1Data['pbft'][std],
-        'label': 'PBFT (' + r'$Network = \mathcal{N}(1000, 300), \lambda = 1000$' + ')',
-        'color': '#3498db'
-    },
-    {
-        'means': lData['pbft'][mean],
-        'std': lData['pbft'][std],
-        'label': 'PBFT (' + r'$Network = \mathcal{N}(250, 50), \lambda = 2000$' + ')',
-        'color': '#34495e'
-    },
+    # {
+    #     'means': d2['mean'],
+    #     'std': d2['std'],
+    #     'label': r'$\mathcal{N}(250, 50)$',
+    #     'color': colors['g']
+    # },
+    # {
+    #     'means': lData['pbft'][mean][:1],
+    #     'std': lData['pbft'][std][:1],
+    #     'label': 'PBFT (' + r'$Network = \mathcal{N}(250, 50), \lambda = 2000$' + ')',
+    #     'color': '#34495e'
+    # },
     # {
     #     'means': data['pbft'][mean],
     #     'std': data['pbft'][std],
@@ -116,6 +240,7 @@ else:
     poss = [pos - l / 2 for pos in poss]
 
 print(poss)
+poss = [-1, 0, 1]
 for data, pos in zip(expData, poss):
     data['pos'] = pos
 draw(expData)

@@ -5,6 +5,16 @@ import normal1, normal2
 import l04, l2
 import partition, partition2
 import static, adaptive, dexon
+
+colors = {
+    'r': '#e74c3c',
+    'o': '#e67e22',
+    'y': '#f1c40f',
+    'g': '#2ecc71',
+    'b': '#3498db',
+    'd': '#34495e',
+    'p': '#8e44ad'
+}
 '''
 def autolabel(rects, ax, xpos='center'):
     """
@@ -33,7 +43,7 @@ def draw(expData):
     ax.set_ylabel('Latency (ms)')
     ax.set_xlabel('# Nodes')
     #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('# Partitions = 3')
+    ax.set_title('ADD+ Adaptive Attack')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
     ax.set_xticks(ind)
     ax.set_xticklabels(('16', '32', '64'))
@@ -44,66 +54,72 @@ def draw(expData):
         yMax = mMax if mMax > yMax else yMax
 
         positions = ind + data['pos'] * (width / 2 + seperateDist)
-        rect = ax.bar(positions, data['means'], width, yerr=data['std'],
+        if data['label'][-6:] == 'attack':
+            rect = ax.bar(positions, data['means'], width, yerr=data['std'],
+                label=data['label'], color=data['color'], hatch='xxxx')
+        else:
+            rect = ax.bar(positions, data['means'], width, yerr=data['std'],
                 label=data['label'], color=data['color'])
+
         
         #autolabel(rects, ax)
     print(yMax)
-    plt.ylim(top=yMax + 70000)
+    plt.ylim(top=yMax + 10000)
     ax.legend(loc='upper left')
     fig.tight_layout()
-    plt.axhline(60000, color='k', linestyle='dashed', linewidth=1)
+    #plt.axhline(60000, color='k', linestyle='dashed', linewidth=1)
     #plt.text(2, 2, 'resolve', ha='right', va='center')
     plt.show()
 
-data = partition2.data
+data = normal1.data
 attackData = adaptive.data
-t = 'm'
+dxnAttackData = dexon.data
+t = 'l'
 mean = t + '_mean'
 std = t + '_std'
 expData = [
     {
-        'means': data['v-basic'][mean],
-        'std': data['v-basic'][std],
-        'label': 'ADD+v1',
-        'color': '#e74c3c'
-    },
-    {
         'means': data['v-vrf'][mean],
         'std': data['v-vrf'][std],
         'label': 'ADD+v2',
-        'color': '#e67e22'
+        'color': colors['g']
+    },
+    {
+        'means': attackData['v-vrf'][mean],
+        'std': attackData['v-vrf'][std],
+        'label': 'ADD+v2 under attack',
+        'color': colors['g']
     },
     {
         'means': data['v-adaptive'][mean],
         'std': data['v-adaptive'][std],
         'label': 'ADD+v3',
-        'color': '#f1c40f'
+        'color': colors['y']
     },
     {
-        'means': data['algorand'][mean],
-        'std': data['algorand'][std],
-        'label': 'Algorand',
-        'color': '#2ecc71'
+        'means': attackData['v-adaptive'][mean],
+        'std': attackData['v-adaptive'][std],
+        'label': 'ADD+v3 under attack',
+        'color': colors['y']
     },
-    {
-        'means': data['aba'][mean],
-        'std': data['aba'][std],
-        'label': 'Async BA',
-        'color': '#3498db'
-    },
-    {
-        'means': data['dexon-hba'][mean],
-        'std': data['dexon-hba'][std],
-        'label': 'DEXON HBA',
-        'color': '#34495e'
-    },
-    {
-        'means': data['pbft'][mean],
-        'std': data['pbft'][std],
-        'label': 'PBFT',
-        'color': '#8e44ad'
-    }
+    # {
+    #     'means': data['aba'][mean],
+    #     'std': data['aba'][std],
+    #     'label': 'Async BA',
+    #     'color': 
+    # },
+    # {
+    #     'means': data['dexon-hba'][mean],
+    #     'std': data['dexon-hba'][std],
+    #     'label': 'DEXON HBA',
+    #     'color': 
+    # },
+    # {
+    #     'means': data['pbft'][mean],
+    #     'std': data['pbft'][std],
+    #     'label': 'PBFT',
+    #     'color': 
+    # }
 ]
 # calculate pos
 l = len(expData)

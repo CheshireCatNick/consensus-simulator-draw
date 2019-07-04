@@ -30,10 +30,9 @@ seperateDist = 0.04
 def draw(expData):
     fig, ax = plt.subplots()
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Latency (ms)')
+    ax.set_ylabel('# Messages')
     ax.set_xlabel('# Nodes')
-    #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('# Partitions = 3')
+    ax.set_title(r'$Network = \mathcal{N}(1000, 300), \lambda = 1000$')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
     ax.set_xticks(ind)
     ax.set_xticklabels(('16', '32', '64'))
@@ -49,15 +48,15 @@ def draw(expData):
         
         #autolabel(rects, ax)
     print(yMax)
-    plt.ylim(top=yMax + 70000)
+    #plt.ylim(top=yMax + 70000)
+    plt.yscale('log', nonposy='clip')
     ax.legend(loc='upper left')
     fig.tight_layout()
-    plt.axhline(60000, color='k', linestyle='dashed', linewidth=1)
     #plt.text(2, 2, 'resolve', ha='right', va='center')
     plt.show()
 
-data = partition2.data
-t = 'l'
+data = normal2.data
+t = 'm'
 mean = t + '_mean'
 std = t + '_std'
 expData = [

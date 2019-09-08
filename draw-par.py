@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import normal1, normal2
 import l04, l2
-import partition, partition2
+import partition2, partition3
 import static, adaptive, dexon
 '''
 def autolabel(rects, ax, xpos='center'):
@@ -30,10 +30,10 @@ seperateDist = 0.04
 def draw(expData):
     fig, ax = plt.subplots()
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Latency (ms)')
+    ax.set_ylabel('Latency (s)')
     ax.set_xlabel('# Nodes')
     #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('# Partitions = 2')
+    ax.set_title('# Partitions = 3')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
     ax.set_xticks(ind)
     ax.set_xticklabels(('16', '32', '64'))
@@ -49,14 +49,14 @@ def draw(expData):
         
         #autolabel(rects, ax)
     print(yMax)
-    plt.ylim(top=yMax + 70000)
+    plt.ylim(top=yMax + 70)
     ax.legend(loc='upper left')
     fig.tight_layout()
-    plt.axhline(60000, color='k', linestyle='dashed', linewidth=1)
+    plt.axhline(60, color='k', linestyle='dashed', linewidth=1)
     #plt.text(2, 2, 'resolve', ha='right', va='center')
     plt.show()
 
-data = partition.data
+data = partition3.data
 t = 'l'
 mean = t + '_mean'
 std = t + '_std'
@@ -104,6 +104,11 @@ expData = [
         'color': '#8e44ad'
     }
 ]
+# latency ms to s
+if (t == 'l'):
+    for data in expData:
+        data['means'] = [i / 1000 for i in data['means']]
+        data['std'] = [i / 1000 for i in data['std']]
 # calculate pos
 l = len(expData)
 poss = range(0, l)

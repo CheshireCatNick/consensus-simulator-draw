@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import normal1, normal2
 import l04, l2
-import partition, partition2
+import partition2, partition3
 import static, adaptive, dexon
 
 colors = {

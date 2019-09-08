@@ -218,24 +218,6 @@ expData = [
     #     'std': d5['std'],
     #     'label': r'$\lambda = 2000$',
     #     'color': colors['r']
-    # },
-    # {
-    #     'means': d2['mean'],
-    #     'std': d2['std'],
-    #     'label': r'$\mathcal{N}(250, 50)$',
-    #     'color': colors['g']
-    # },
-    # {
-    #     'means': lData['pbft'][mean][:1],
-    #     'std': lData['pbft'][std][:1],
-    #     'label': 'PBFT (' + r'$Network = \mathcal{N}(250, 50), \lambda = 2000$' + ')',
-    #     'color': '#34495e'
-    # },
-    # {
-    #     'means': data['pbft'][mean],
-    #     'std': data['pbft'][std],
-    #     'label': 'PBFT',
-    #     'color': '#8e44ad'
     # }
 ]
 # latency ms to s

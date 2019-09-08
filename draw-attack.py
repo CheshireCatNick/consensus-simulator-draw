@@ -40,10 +40,10 @@ seperateDist = 0.04
 def draw(expData):
     fig, ax = plt.subplots()
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Latency (ms)')
+    ax.set_ylabel('Latency (s)')
     ax.set_xlabel('# Nodes')
     #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('ADD+ Adaptive Attack')
+    ax.set_title('DEXON Adaptive Attack')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
     ax.set_xticks(ind)
     ax.set_xticklabels(('16', '32', '64'))
@@ -64,7 +64,7 @@ def draw(expData):
         
         #autolabel(rects, ax)
     print(yMax)
-    plt.ylim(top=yMax + 10000)
+    plt.ylim(top=yMax + 10)
     ax.legend(loc='upper left')
     fig.tight_layout()
     #plt.axhline(60000, color='k', linestyle='dashed', linewidth=1)
@@ -72,12 +72,80 @@ def draw(expData):
     plt.show()
 
 data = normal1.data
+# add+ static attack
+#attackData = static.data
+# add+ adaptive attack
+#attackData = adaptive.data
+# dexon adaptive attack
 attackData = adaptive.data
-dxnAttackData = dexon.data
+dexonAttackData = dexon.data
 t = 'l'
 mean = t + '_mean'
 std = t + '_std'
 expData = [
+    # add+ static attack
+    # {
+    #     'means': data['v-basic'][mean],
+    #     'std': data['v-basic'][std],
+    #     'label': 'ADD+v1',
+    #     'color': colors['r']
+    # },
+    # {
+    #     'means': attackData['v-basic'][mean],
+    #     'std': attackData['v-basic'][std],
+    #     'label': 'ADD+v1 under attack',
+    #     'color': colors['r']
+    # },
+    # {
+    #     'means': data['v-vrf'][mean],
+    #     'std': data['v-vrf'][std],
+    #     'label': 'ADD+v2',
+    #     'color': colors['g']
+    # },
+    # {
+    #     'means': attackData['v-vrf'][mean],
+    #     'std': attackData['v-vrf'][std],
+    #     'label': 'ADD+v2 under attack',
+    #     'color': colors['g']
+    # }
+    # add+ adaptive attack
+    # {
+    #     'means': data['v-vrf'][mean],
+    #     'std': data['v-vrf'][std],
+    #     'label': 'ADD+v2',
+    #     'color': colors['g']
+    # },
+    # {
+    #     'means': attackData['v-vrf'][mean],
+    #     'std': attackData['v-vrf'][std],
+    #     'label': 'ADD+v2 under attack',
+    #     'color': colors['g']
+    # },
+    # {
+    #     'means': data['v-adaptive'][mean],
+    #     'std': data['v-adaptive'][std],
+    #     'label': 'ADD+v3',
+    #     'color': colors['y']
+    # },
+    # {
+    #     'means': attackData['v-adaptive'][mean],
+    #     'std': attackData['v-adaptive'][std],
+    #     'label': 'ADD+v3 under attack',
+    #     'color': colors['y']
+    # }
+    # dexon adaptive attack
+    {
+        'means': data['dexon-hba'][mean],
+        'std': data['dexon-hba'][std],
+        'label': 'DEXON HBA',
+        'color': colors['p']
+    },
+    {
+        'means': dexonAttackData['dexon-hba'][mean],
+        'std': dexonAttackData['dexon-hba'][std],
+        'label': 'DEXON HBA under attack',
+        'color': colors['p']
+    },
     {
         'means': data['v-vrf'][mean],
         'std': data['v-vrf'][std],
@@ -90,37 +158,12 @@ expData = [
         'label': 'ADD+v2 under attack',
         'color': colors['g']
     },
-    {
-        'means': data['v-adaptive'][mean],
-        'std': data['v-adaptive'][std],
-        'label': 'ADD+v3',
-        'color': colors['y']
-    },
-    {
-        'means': attackData['v-adaptive'][mean],
-        'std': attackData['v-adaptive'][std],
-        'label': 'ADD+v3 under attack',
-        'color': colors['y']
-    },
-    # {
-    #     'means': data['aba'][mean],
-    #     'std': data['aba'][std],
-    #     'label': 'Async BA',
-    #     'color': 
-    # },
-    # {
-    #     'means': data['dexon-hba'][mean],
-    #     'std': data['dexon-hba'][std],
-    #     'label': 'DEXON HBA',
-    #     'color': 
-    # },
-    # {
-    #     'means': data['pbft'][mean],
-    #     'std': data['pbft'][std],
-    #     'label': 'PBFT',
-    #     'color': 
-    # }
 ]
+# latency ms to s
+if (t == 'l'):
+    for data in expData:
+        data['means'] = [i / 1000 for i in data['means']]
+        data['std'] = [i / 1000 for i in data['std']]
 # calculate pos
 l = len(expData)
 poss = range(0, l)

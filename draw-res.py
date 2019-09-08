@@ -35,15 +35,23 @@ def autolabel(rects, ax, xpos='center'):
                     textcoords="offset points",  # in both directions
                     ha=ha[xpos], va='bottom')
 '''
-width = 0.2  # the width of the bars
+# for different network
+width = 0.25  # the width of the bars
 seperateDist = 0.15
+# for different lambda
+#width = 0.2  # the width of the bars
+#seperateDist = 0.15
 def draw(expData):
     fig, ax = plt.subplots()
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('Latency (ms)')
-    ax.set_xlabel('# Nodes')
+    ax.set_ylabel('Latency (s)')
+    #ax.set_xlabel('# Nodes')
     #ax.set_title(r'$Network = \mathcal{N}(250, 50), \lambda = 1000$')
-    ax.set_title('Different Network Configuration ' + r'$\lambda$')
+    # for different network
+    ax.set_title('Responsiveness with Different Network')
+
+    # for different lambda
+    #ax.set_title('Different Network Configuration ' + r'$\lambda$')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
 
     ax.set_xticks(ind)
@@ -54,8 +62,8 @@ def draw(expData):
         print(data)
         mMax = max([a + b for a, b in zip(data['means'], data['std'])])
         yMax = mMax if mMax > yMax else yMax
-
-        positions = ind + data['pos'] * (width / 2 + seperateDist)
+        # 0.14 is for different network
+        positions = ind + data['pos'] * (width / 2 + seperateDist) + 0.14
         rect = ax.bar(positions, data['means'], width, yerr=data['std'],
                 label=data['label'], color=data['color'])
         
@@ -63,7 +71,7 @@ def draw(expData):
     print(yMax)
     plt.axvline(3.5, color='k', linestyle='dashed', linewidth=1)
 
-    plt.ylim(top=yMax + 1000)
+    plt.ylim(top=yMax + 1)
     ax.legend(loc='upper left')
     fig.tight_layout()
     plt.show()
@@ -179,36 +187,38 @@ d5 = {
 }
 
 expData = [
-    # {
-    #     'means': d1['mean'],
-    #     'std': d1['std'],
-    #     'label': r'$\mathcal{N}(1000, 300)$',
-    #     'color': colors['r']
-    # },
-    # {
-    #     'means': d2['mean'],
-    #     'std': d2['std'],
-    #     'label': r'$\mathcal{N}(250, 50)$',
-    #     'color': colors['g']
-    # },
+    # for different network
     {
-        'means': d3['mean'],
-        'std': d3['std'],
-        'label': r'$\lambda = 400$',
-        'color': colors['g']
-    },
-    {
-        'means': d4['mean'],
-        'std': d4['std'],
-        'label': r'$\lambda = 1000$',
-        'color': colors['y']
-    },
-        {
-        'means': d5['mean'],
-        'std': d5['std'],
-        'label': r'$\lambda = 2000$',
+        'means': d1['mean'],
+        'std': d1['std'],
+        'label': r'$\mathcal{N}(1000, 300)$',
         'color': colors['r']
     },
+    {
+        'means': d2['mean'],
+        'std': d2['std'],
+        'label': r'$\mathcal{N}(250, 50)$',
+        'color': colors['g']
+    },
+    # for different lambda
+    # {
+    #     'means': d3['mean'],
+    #     'std': d3['std'],
+    #     'label': r'$\lambda = 400$',
+    #     'color': colors['g']
+    # },
+    # {
+    #     'means': d4['mean'],
+    #     'std': d4['std'],
+    #     'label': r'$\lambda = 1000$',
+    #     'color': colors['y']
+    # },
+    #     {
+    #     'means': d5['mean'],
+    #     'std': d5['std'],
+    #     'label': r'$\lambda = 2000$',
+    #     'color': colors['r']
+    # },
     # {
     #     'means': d2['mean'],
     #     'std': d2['std'],
@@ -228,6 +238,12 @@ expData = [
     #     'color': '#8e44ad'
     # }
 ]
+# latency ms to s
+if (t == 'l'):
+    for data in expData:
+        data['means'] = [i / 1000 for i in data['means']]
+        data['std'] = [i / 1000 for i in data['std']]
+
 # calculate pos
 l = len(expData)
 poss = range(0, l)

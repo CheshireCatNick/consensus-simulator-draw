@@ -30,7 +30,7 @@ seperateDist = 0.04
 def draw(expData):
     fig, ax = plt.subplots()
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('# Messages')
+    ax.set_ylabel('Latency (s)')
     ax.set_xlabel('# Nodes')
     ax.set_title(r'$Network = \mathcal{N}(1000, 300), \lambda = 1000$')
     ind = np.arange(len(expData[0]['means']))  # the x locations for the groups
@@ -48,15 +48,15 @@ def draw(expData):
         
         #autolabel(rects, ax)
     print(yMax)
-    #plt.ylim(top=yMax + 70000)
-    plt.yscale('log', nonposy='clip')
+    plt.ylim(top=yMax + 5)
+    #plt.yscale('log', nonposy='clip')
     ax.legend(loc='upper left')
     fig.tight_layout()
     #plt.text(2, 2, 'resolve', ha='right', va='center')
     plt.show()
 
 data = normal2.data
-t = 'm'
+t = 'l'
 mean = t + '_mean'
 std = t + '_std'
 expData = [
@@ -103,6 +103,11 @@ expData = [
         'color': '#8e44ad'
     }
 ]
+# latency ms to s
+if (t == 'l'):
+    for data in expData:
+        data['means'] = [i / 1000 for i in data['means']]
+        data['std'] = [i / 1000 for i in data['std']]
 # calculate pos
 l = len(expData)
 poss = range(0, l)
